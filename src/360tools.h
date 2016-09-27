@@ -86,6 +86,10 @@ void resample_tsp_2d(void * src, int w_start, int w_end, int w_src, int h_src, \
 	int s_src, void * dst, int w_dst, int i, int j, S360_SPH_COORD * map);
 void resample_tsp_2d_10b(void * src, int w_start, int w_end, int w_src, \
 	int h_src, int s_src, void * dst, int w_dst, int i, int j, S360_SPH_COORD * map);
+void resample_2d_bounded(void * src, int w_start, int w_end, int h_src, int s_src, \
+	double x, double y, void * dst, int x_dst, int x_begin, int x_end, int y_start, int y_end);
+void resample_2d_10b_bounded(void * src, int w_start, int w_end, int h_src, int s_src, \
+	double x, double y, void * dst, int x_dst, int x_begin, int x_end, int y_start, int y_end);
 resample_fn resample_fp(int cs);
 
 /* padding *******************************************************************/
@@ -166,6 +170,7 @@ void s360_deinit(void);
 #include "360tools_cmp.h"
 #include "360tools_ohp.h"
 #include "360tools_tsp.h"
+#include "360tools_ssp.h"
 
 #ifdef __cplusplus
 }

@@ -52,6 +52,7 @@ Checkout the source for 360 Tools
 	+	Octahedron projection (OHP)
 	+	Cubemap projection (CMP)
 	+	Truncated Square Pyramid projection (TSP)
+	+	Segmented Sphere projection (SSP)
 	+	Reshaped Icosahedral projection (RISP)
 	+	Reshaped Octahedron projection (ROHP)
 	+	Reshaped Cubemap projection (RCMP)
@@ -107,8 +108,9 @@ Checkout the source for 360 Tools
 		- ISP		4268x2016
 		- OHP		5984x2592
 		- CMP		3840x2880
-		
+		- SSP		3840x2880	
 	+	ERP 		4096x2048
 		- ISP		4268x2016
 		- OHP		6208x2688
 		- CMP		4096x3072
+		- SSP		4096x3072

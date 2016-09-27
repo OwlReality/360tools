@@ -363,6 +363,72 @@ void resample_2d_10b(void * src, int w_start, int w_end, int h_src, int s_src, \
 		dst_16[x_dst] = S360_CLIP_S32_TO_U10(i);
 	}
 }
+
+/* lanczos */
+void resample_2d_bounded(void * src, int w_start, int w_end, int h_src, int s_src, \
+	double x, double y, void * dst, int x_dst, int x_begin, int x_end, int y_start, int y_end)
+{
+	uint8 * src_8;
+	uint8 * dst_8;
+	float coef, sum = 0, res = 0;
+	int i, j, idx_x, idx_y;
+
+	src_8 = (uint8 *)src;
+	dst_8 = (uint8 *)dst;
+
+	for(j=-LANCZOS_TAB_SIZE; j<LANCZOS_TAB_SIZE; j++)
+	{
+		for(i=-LANCZOS_TAB_SIZE; i<LANCZOS_TAB_SIZE; i++)
+		{
+			idx_x = (int)x + i + 1;
+			idx_y = (int)y + j + 1;
+			if(idx_y >= y_start && idx_x >= x_begin && idx_x < x_end && idx_y < y_end)
+			{
+				coef = lanczos_coef(x - idx_x) * lanczos_coef(y - idx_y);
+				res += src_8[idx_x + idx_y * s_src] * coef;
+				sum += coef;
+			}
+		}
+	}
+	if(sum != 0)
+	{
+		i = (int)(res / sum + 0.5);
+		dst_8[x_dst] = S360_CLIP_S32_TO_U8(i);
+	}
+}
+
+/* lanczos for 10-bit*/
+void resample_2d_10b_bounded(void * src, int w_start, int w_end, int h_src, int s_src, \
+	double x, double y, void * dst, int x_dst, int x_begin, int x_end, int y_start, int y_end)
+{
+	double coef, sum = 0, res = 0;
+	int i, j, idx_x, idx_y;
+	uint16 * src_16;
+	uint16 * dst_16;
+
+	src_16 = (uint16 *)src;
+	dst_16 = (uint16 *)dst;
+
+	for(j=-LANCZOS_TAB_SIZE; j<LANCZOS_TAB_SIZE; j++)
+	{
+		for(i=-LANCZOS_TAB_SIZE; i<LANCZOS_TAB_SIZE; i++)
+		{
+			idx_x = (int)x + i + 1;
+			idx_y = (int)y + j + 1;
+			if(idx_y >= y_start && idx_x >= x_begin && idx_x < x_end && idx_y < y_end)
+			{
+				coef = lanczos_coef(x - idx_x) * lanczos_coef(y - idx_y);
+				res += src_16[idx_x + idx_y * s_src] * coef;
+				sum += coef;
+			}
+		}
+	}
+	if(sum != 0)
+	{
+		i = (int)(res / sum + 0.5);
+		dst_16[x_dst] = S360_CLIP_S32_TO_U10(i);
+	}
+}
 #else
 /* bi-linear */
 void resample_2d(void * src, int w_src, int h_src, int s_src, \

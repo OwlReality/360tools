@@ -92,6 +92,7 @@ static S360_ARGS_OPT argopt[] = \
 		"3:  ERP  to CMP\n\t4:  CMP  to ERP\n\t"
 		"5:  ERP  to OHP\n\t6:  OHP  to ERP\n\t"
 		"7:  ERP  to TSP\n\t8:  TSP  to ERP\n\t"
+		"9:  ERP  to SSP\n\t10: SSP  to ERP\n\t"
 		"11: ISP  to RISP\n\t12: RISP to ISP\n\t"
 		"13: CMP  to RCMP\n\t14: RCMP to CMP\n\t"
 		"15: OHP  to ROHP\n\t16: ROHP to OHP\n\t"
@@ -280,6 +281,12 @@ int main(int argc, const char * argv[])
 		goto END;
 	}
 
+	if ((cfmt == CONV_FMT_ERP_TO_SSP) && ((w_out % 4 != 0 || h_out % 4 != 0) || (w_out * 3 != h_out * 4))) {
+		s360_print("Invalid output resolution for SSP. Suggested aspect ratio 4:3\n");
+		print_usage();
+		goto END;
+	}
+
 	if(!opt_flag[CMD_FLAG_CONV_OWIDTH]) w_out = w_in;
 	if(!opt_flag[CMD_FLAG_CONV_OHEIGHT]) h_out = h_in;
 
@@ -341,6 +348,12 @@ int main(int argc, const char * argv[])
 		break;
 	case CONV_FMT_TSP_TO_ERP:
 		fn_conv = s360_tsp_to_erp;
+		break;
+	case CONV_FMT_ERP_TO_SSP:
+		fn_conv = o360_erp_to_ssp;
+		break;
+	case CONV_FMT_SSP_TO_ERP:
+		fn_conv = o360_ssp_to_erp;
 		break;
 	case CONV_FMT_ISP_TO_RISP:
 		fn_conv = s360_isp_to_risp2;
